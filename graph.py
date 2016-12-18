@@ -1,5 +1,3 @@
-import os
-
 class GraphLib:
     def __init__(self):
         self.graph_file_data = []
@@ -80,11 +78,11 @@ class GraphLib:
         >>> a.convert_to_adjacency_matrix()
         ----------
         '''
-        for i in range(len(self.graph_file_data)):
+        for i, c in enumerate(self.graph_file_data):
             adj_vert = []
             vert = self.graph_file_data[i]
-            for j in range(len(vert)):
-                if vert[j] == '1':
+            for j, key in enumerate(vert):
+                if key == '1':
                     adj_vert.append(j)
             self.adjacency_list[i] = adj_vert
     def convert_from_list_to_adjacency_matrix(self):
@@ -103,16 +101,12 @@ class GraphLib:
         graph_len = len(self.graph_file_data)
         for i in range(graph_len):
             row = self.graph_file_data[i].split()[1]
-            adjs = [ 
+            adjs = [
                 1 if i in [int(v) for v in row]
                 else 0
                 for i in range(graph_len)
             ]
             self.matrix_adjacency.append(adjs)
-        asd = 1
-
-#не работает
-#почему меняется adj_vert?????????
     def save_in_file_matrix_view(self, file_path):
         '''
         Сохраняем в файл матрицу смежности
@@ -135,9 +129,9 @@ class GraphLib:
             asd = asd.replace(' ', '')
             jesus = ''.join(asd)
             vert += jesus + '\n'
-        with open(file_path, "w") as f:
-            f.write(vert)
-        f.close()
+        with open(file_path, "w") as file:
+            file.write(vert)
+        file.close()
     def save_in_file_list_view(self, file_path):
         '''
         Сохраняем в файл список смежности
@@ -162,32 +156,99 @@ class GraphLib:
                 value = value.replace(' ', '')
                 f.write(key + ' ' + value + '\n')
         f.close()
+    def add_vertex_in_matrix(self):
+        '''
+        Добавляем вершину в матрицу смежности
 
+        ----------
+          Пример:
+        ----------
+        >>> a.add_vertex_in_matrix()
+        ----------
+        '''
+        if self.matrix_adjacency != []:
+            for i, key in enumerate(self.matrix_adjacency):
+                key.append(0)
+            vert = []
+            for i in range(len(self.matrix_adjacency) + 1):
+                vert.append(0)
+            self.matrix_adjacency.append(vert)
+    def add_vertex_in_list(self):
+        '''
+        Добавляем вершину в список смежности
+
+        ----------
+          Пример:
+        ----------
+        >>> a.add_vertex_in_list()
+        ----------
+        '''
+        if self.adjacency_list != []:
+            self.adjacency_list[len(self.adjacency_list)] = []
+    def delete_vertex_from_list(self, num_vertex):
+        '''
+        Удаляем вершину из списка смежности
+
+        ----------
+        Аргументы:
+        ----------
+        num_vertex - номер вершины, которую удаляем
+        ----------
+          Пример:
+        ----------
+        >>> a.delete_vertex_from_list(3)
+        ----------
+        '''
+        for i, key in enumerate(self.adjacency_list):
+            for j in range(len(self.adjacency_list[i])):
+                if num_vertex == self.adjacency_list[i][j]:
+                    del self.adjacency_list[i][j]
+                    break
+        del self.adjacency_list[num_vertex]
+    #def delete_vertex_from_matrix(self, num_vertex):
+        '''
+        Удаляем вершину из списка смежности
+
+        ----------
+        Аргументы:
+        ----------
+        num_vertex - номер вершины, которую удаляем
+        ----------
+          Пример:
+        ----------
+        >>> a.delete_vertex_from_list(3)
+        ----------
+        '''
 class Graph:
     def __init__(self):
-        self.edges_list
-        self.numb_vertices
-        self.numb_edges
-        self.directed
+        self.edges_list = []
+        self.numb_vertices = 0
+        self.numb_edges = 0
+        self.directed = False
 
 class Edgenode:
     def __init__(self):
-        self.adjancency
-        self.weight
-        self.next
+        self.adjancency = []
+        self.weight = 0
+        #self.next
 
 a = GraphLib()
-a.read_graph('./graph3.txt')
-#a.convert_to_adjacency_matrix()
+a.read_graph('./graph1.txt')
+a.convert_to_adjacency_matrix()
 #print(a.graph_file_data)
 #print(a.matrix_adjacency)
-#a.convert_from_matrix_to_adjacency_list()
+a.convert_from_matrix_to_adjacency_list()
 #print(a.adjacency_list)
 #a.save_in_file_matrix_view('./graph2.txt')
 #a.convert_to_adjacency_list()
 #a.save_in_file_list_view('./graph2.txt')
 #print(a.adjacency_list)
-a.convert_from_list_to_adjacency_matrix()
+#a.convert_from_list_to_adjacency_matrix()
+a.add_vertex_in_matrix()
+a.add_vertex_in_list()
+a.delete_vertex_from_list(4)
+
+
 #графы оргафы 
 #сохранение в файл
 #матрица смежности, список смежности, список инцидентности
