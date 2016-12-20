@@ -8,6 +8,17 @@ class Graph:
         self.nodes_list = []
         self.directed = directed
 
+    def get_matrix(self):
+        """
+        Получаем матрицу смежности
+        """
+        return GraphLib.graph_to_matrix(self)
+
+    def get_list(self):
+        """
+        Получаем список смежности
+        """
+        return GraphLib.graph_to_list(self)
 
 class Edge:
     def __init__(self, node_in, node_out, weight=None):
