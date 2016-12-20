@@ -72,7 +72,7 @@ class GraphLib:
                 data += line
             self.graph_file_data = data.splitlines()
             file.close()
-        
+
     def convert_to_adjacency_matrix(self):
         """
         Заполняем матрицу смежности,
@@ -108,7 +108,8 @@ class GraphLib:
         """
         for i in range(len(self.graph_file_data)):
             god_bless_us = []
-            self.adjacency_list[int(self.graph_file_data[i][0][0])] = list(self.graph_file_data[i][2:])
+            self.adjacency_list[int(self.graph_file_data[i][0][0])] = \
+            list(self.graph_file_data[i][2:])
             for j in range(len(self.adjacency_list[i])):
                 god_bless_us.append(int(self.adjacency_list[i][j]))
             self.adjacency_list[i] = god_bless_us
@@ -264,24 +265,72 @@ class GraphLib:
         del self.matrix_adjacency[num_vertex]
         for i in range(len(self.matrix_adjacency)):
             del self.matrix_adjacency[i][num_vertex]
+        # doesn't work currently yet
+    def graph_to_matrix(self):
+        """
+        Получаем из списка смежности матрицу смежности
 
+        num_vertex - номер вершины, которую удаляем
+        ----------
+          Пример:
+        ----------
+        >>> A.convert_to_matrix()
+        ----------
+        """
+        self.matrix_adjacency = []
+        graph_len = len(self.adjacency_list)
+        for i in range(graph_len):
+            row = self.adjacency_list[i]
+            adjs = [
+                1 if i in [int(v) for v in row]
+                else 0
+                for i in range(graph_len)
+            ]
+            self.matrix_adjacency.append(adjs)
+        return self.matrix_adjacency
+    def graph_to_list(self):
+        """
+        Получаем из списка смежности матрицу смежности
+
+        num_vertex - номер вершины, которую удаляем
+        ----------
+          Пример:
+        ----------
+        >>> A.graph_to_list()
+        ----------
+        """
+        self.adjacency_list = {}
+
+        graph_len = len(self.matrix_adjacency)
+        for i in range(graph_len):
+            adjs = []
+            row = self.matrix_adjacency[i]
+            for v in range(graph_len):
+                if row[v] == 1:
+                    adjs.append(v)
+            self.adjacency_list[i] = adjs
+        return self.adjacency_list
 
 A = GraphLib()
 A.read_graph('./graph1.txt')
 A.convert_to_adjacency_matrix()
 #print(A.graph_file_data)
 #print(A.matrix_adjacency)
-A.convert_from_matrix_to_adjacency_list()
+#A.convert_from_matrix_to_adjacency_list()
 #print(A.adjacency_list)
-A.save_in_file_matrix_view('./graph2.txt')
+#A.save_in_file_matrix_view('./graph2.txt')
 #A.convert_to_adjacency_list()
 #A.save_in_file_list_view('./graph2.txt')
 #print(A.adjacency_list)
 #A.convert_from_list_to_adjacency_matrix()
-A.add_vertex_in_matrix()
-A.add_vertex_in_list()
+#A.add_vertex_in_matrix()
+#A.add_vertex_in_list()
 #A.delete_vertex_from_list(4)
-A.delete_vertex_from_matrix(4)
+
+#A.delete_vertex_from_matrix(4)
+#print(A.graph_to_matrix())
+print(A.graph_to_list())
+
 
 #графы оргафы 
 #сохранение в файл
