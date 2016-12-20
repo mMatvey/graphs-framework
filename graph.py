@@ -9,6 +9,18 @@ class Graph:
         self.nodes_list = nodes_list
         self.directed = directed
 
+    def __str__(self):
+        nodes_string = ""
+        for node in self.nodes_list:
+            nodes_string += str(node) + " "
+        edges_string = ""
+        for edge in self.edges_list:
+            edges_string += str(edge) + " "
+        return "Directed?: " + str(self.directed) + '\n' \
+                + "Nodes: " + nodes_string + '\n' \
+                + "Edges: " + edges_string
+
+
     def get_matrix(self):
         """
         Получаем матрицу смежности
@@ -34,6 +46,9 @@ class Edge:
         self.node_out = node_out
         self.edge_weight = weight
 
+    def __str__(self):
+     return str(self.node_in) + ", " + str(self.node_out) + " "
+
     def __key(self):
         return tuple(self.__dict__.values())
 
@@ -56,6 +71,9 @@ class Edge:
 class Node:
     def __init__(self, node_id):
         self.node_id = node_id
+
+    def __str__(self):
+     return str(self.node_id)
 
     def __key(self):
         return tuple(self.__dict__.values())
@@ -100,30 +118,26 @@ class GraphLib:
     @classmethod
     def create_graph_from_strings(cls, directed_line, nodes_line, edges_line):
         """
-        Создаёт граф на основе переданных строк с консоли или считанных из файла,
-        если произошла ошибка, возвращает False
+        Создаёт граф на основе переданных строк с консоли или считанных из файла
         :rtype: Graph
         :param directed_line: Если пусто\0  - граф неориентированный
         :param nodes_line: формат "node_id1 node_id2 node_id3"
         :param edges_line: формат "node_id1,node_id2 node_id3,node_id4"
-        :return: new Graph object, (False, exception)
+        :return: new Graph object
         """
-        try:
-            directed = bool(directed_line)
-            nodes_ids = list(map(int, nodes_line))  # from str to int
-            nodes = []
-            for node_id in nodes_ids:
-                nodes.append(Node(node_id))
-            edges = []
-            get_node_by_id = lambda node_id, nodes_list: \
-                [node for node in nodes_list if node.node_id == node_id]
-            for pair in edges_line:
-                first_node_id, second_node_id = map(int, pair.split(","))
-                edges.append((get_node_by_id(first_node_id, nodes),
-                              get_node_by_id(second_node_id, nodes)))
-            return Graph(directed, nodes, edges), None
-        except Exception as exception:
-            return False, exception
+        directed = bool(directed_line)
+        nodes_ids = list(map(int, nodes_line.split()))  # from str to int
+        nodes = []
+        for node_id in nodes_ids:
+            nodes.append(Node(node_id))
+        edges = []
+        get_node_by_id = lambda node_id, nodes_list: \
+            [node for node in nodes_list if node.node_id == node_id]
+        for pair in edges_line.split():
+            first_node_id, second_node_id = map(int, pair.split(","))
+            edges.append((get_node_by_id(first_node_id, nodes),
+                          get_node_by_id(second_node_id, nodes)))
+        return Graph(directed, nodes, edges)
 
     def read_graph(self, file_path):
         """
@@ -382,9 +396,9 @@ class GraphLib:
             self.adjacency_list[i] = adjs
         return self.adjacency_list
 
-A = GraphLib()
-A.read_graph('./graph1.txt')
-A.convert_to_adjacency_matrix()
+#A = GraphLib()
+##A.read_graph('./graph1.txt')
+#A.convert_to_adjacency_matrix()
 #print(A.graph_file_data)
 #print(A.matrix_adjacency)
 #A.convert_from_matrix_to_adjacency_list()
@@ -400,8 +414,11 @@ A.convert_to_adjacency_matrix()
 
 #A.delete_vertex_from_matrix(4)
 #print(A.graph_to_matrix())
-print(A.graph_to_list())
-
+#print(A.graph_to_list())
+if __name__ == '__main__':
+    wtf = GraphLib.read_graph_console_input()
+    print(str(wtf))
+    input()
 
 #графы оргафы 
 #сохранение в файл

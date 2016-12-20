@@ -76,21 +76,19 @@ class TestGraphClasses(unittest.TestCase):
         for i in range(0, 5):
             directed, edges, nodes = generate_random_params()
             graph = Graph(directed, edges, nodes)
-            if graph:
-                self.assertEqual(directed, graph.directed)
-                self.assertEqual(edges, graph.edges_list)
-                self.assertEqual(nodes, graph.nodes_list)
+            self.assertEqual(directed, graph.directed)
+            self.assertEqual(edges, graph.edges_list)
+            self.assertEqual(nodes, graph.nodes_list)
 
     def test_graph_creation_by_strings(self):
         for i in range(0, 5):
             directed, edges, nodes = generate_random_params_strings()
             graph = Graph(directed, edges, nodes)
-            if graph:
-                self.assertEqual(directed, graph.directed)
-                self.assertEqual(edges, graph.edges_list)
-                self.assertEqual(nodes, graph.nodes_list)
-            else:
-                raise graph[1]  # returned tuple(False, exception)
+            self.assertEqual(directed, graph.directed)
+            self.assertEqual(edges, graph.edges_list)
+            self.assertEqual(nodes, graph.nodes_list)
+
+
 
 
 if __name__ == '__main__':
