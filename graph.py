@@ -1,10 +1,12 @@
 class Graph:
-    def __init__(self, directed=False):
+    def __init__(self, directed=False, edges_list=[], nodes_list=[]):
         """
-        :param directed: Ориентирован ли граф
+        :param nodes_list: список узлов [Node, Node, ...]
+        :param edges_list: список рёбер [Edge, Edge, ...]
+        :param directed: Ориентирован ли граф [True, False]
         """
-        self.edges_list = []
-        self.nodes_list = []
+        self.edges_list = edges_list
+        self.nodes_list = nodes_list
         self.directed = directed
 
     def get_matrix(self):
@@ -19,6 +21,8 @@ class Graph:
         """
         return GraphLib.graph_to_list(self)
 
+
+
 class Edge:
     def __init__(self, node_in, node_out, weight=None):
         """
@@ -29,6 +33,15 @@ class Edge:
         self.node_in = node_in
         self.node_out = node_out
         self.edge_weight = weight
+
+    def __key(self):
+        return tuple(self.__dict__.values())
+
+    def __eq__(x, y):
+        return x.__key() == y.__key()
+
+    def __hash__(self):
+        return hash(self.__key())
 
     def incidence_to_node(self, node):
         """
@@ -43,6 +56,15 @@ class Edge:
 class Node:
     def __init__(self, node_id):
         self.node_id = node_id
+
+    def __key(self):
+        return tuple(self.__dict__.values())
+
+    def __eq__(x, y):
+        return x.__key() == y.__key()
+
+    def __hash__(self):
+        return hash(self.__key())
 
     def incidence_to_edge(self, edge):
         """
@@ -65,13 +87,43 @@ class GraphLib:
         self.adjacency_list = {}
 
     @classmethod
-    def read_graph_console(self):
+    def read_graph_console_input(cls):
         """
+        После диалога с пользователем возвращает заданным им граф
         :return: new Graph object
         """
-        directed = input("Граф ориентированный?(введите 0/пустая строка - нет): ")
-        nodes = list(map(int,input("Введити номера узлов: ")))
-        edges = nodes = list(map((int, int),input("Введити рёбра( ): ")))
+        directed_line = input("Граф ориентированный?(пустая строка - нет): ")
+        nodes_line = input("Введити номера узлов через пробел: ")
+        edges_line = input("Введити рёбра( node1,node2 node3,node4): ")
+        return GraphLib.create_graph_from_strings(directed_line, nodes_line, edges_line)
+
+    @classmethod
+    def create_graph_from_strings(cls, directed_line, nodes_line, edges_line):
+        """
+        Создаёт граф на основе переданных строк с консоли или считанных из файла,
+        если произошла ошибка, возвращает False
+        :rtype: Graph
+        :param directed_line: Если пусто\0  - граф неориентированный
+        :param nodes_line: формат "node_id1 node_id2 node_id3"
+        :param edges_line: формат "node_id1,node_id2 node_id3,node_id4"
+        :return: new Graph object, (False, exception)
+        """
+        try:
+            directed = bool(directed_line)
+            nodes_ids = list(map(int, nodes_line))  # from str to int
+            nodes = []
+            for node_id in nodes_ids:
+                nodes.append(Node(node_id))
+            edges = []
+            get_node_by_id = lambda node_id, nodes_list: \
+                [node for node in nodes_list if node.node_id == node_id]
+            for pair in edges_line:
+                first_node_id, second_node_id = map(int, pair.split(","))
+                edges.append((get_node_by_id(first_node_id, nodes),
+                              get_node_by_id(second_node_id, nodes)))
+            return Graph(directed, nodes, edges), None
+        except Exception as exception:
+            return False, exception
 
     def read_graph(self, file_path):
         """
