@@ -1,5 +1,5 @@
 import unittest
-from graph import Node, Edge, Graph
+from graph import Node, Edge, Graph, GraphLib
 
 class TestGraphClasses(unittest.TestCase):
 
@@ -15,6 +15,8 @@ class TestGraphClasses(unittest.TestCase):
         self.assertEqual(edge.incidence_to_node(node2), 1)
         self.assertEqual(edge.incidence_to_node(node0), 0)
 
+    def test_graph_console_read(self):
+        GraphLib.read_graph_console()
 
 if __name__ == '__main__':
     unittest.main()

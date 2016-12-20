@@ -1,7 +1,6 @@
 class Graph:
     def __init__(self, directed=False):
         """
-
         :param directed: Ориентирован ли граф
         """
         self.edges_list = []
@@ -53,6 +52,15 @@ class GraphLib:
         self.graph_file_data = []
         self.matrix_adjacency = []
         self.adjacency_list = {}
+
+    @classmethod
+    def read_graph_console(self):
+        """
+        :return: new Graph object
+        """
+        directed = input("Граф ориентированный?(введите 0/пустая строка - нет): ")
+        nodes = list(map(int,input("Введити номера узлов: ")))
+        edges = nodes = list(map((int, int),input("Введити рёбра( ): ")))
 
     def read_graph(self, file_path):
         """
