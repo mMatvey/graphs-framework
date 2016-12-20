@@ -35,6 +35,7 @@ def generate_random_params():
     edges = list(edges_set)
     return directed, nodes, edges
 
+
 def generate_random_params_strings():
     """
     params in string for parsing testing, creating grapth from strings
@@ -58,6 +59,7 @@ def generate_random_params_strings():
         edges += str(pair[0]) + "," + str(pair[1]) + " "
     return directed, nodes, edges
 
+
 class TestGraphClasses(unittest.TestCase):
 
     def test_incidences(self):
@@ -74,7 +76,7 @@ class TestGraphClasses(unittest.TestCase):
 
     def test_graph_creation(self):
         for i in range(0, 5):
-            directed,nodes, edges  = generate_random_params()
+            directed, nodes, edges = generate_random_params()
             graph = Graph(directed, nodes, edges)
             self.assertEqual(directed, graph.directed)
             self.assertEqual(edges, graph.edges_list)

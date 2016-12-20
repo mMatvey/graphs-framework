@@ -20,7 +20,6 @@ class Graph:
                 + "Nodes: " + nodes_string + '\n' \
                 + "Edges: " + edges_string
 
-
     def get_matrix(self):
         """
         Получаем матрицу смежности
@@ -34,8 +33,8 @@ class Graph:
         return GraphLib.graph_to_list(self)
 
 
-
 class Edge:
+
     def __init__(self, node_in, node_out, weight=None):
         """
         :param node_in:  в которое входит ребро
@@ -47,7 +46,7 @@ class Edge:
         self.edge_weight = weight
 
     def __str__(self):
-     return str(self.node_in) + ", " + str(self.node_out) + " "
+        return str(self.node_in) + ", " + str(self.node_out) + " "
 
     def __key(self):
         return tuple(self.__dict__.values())
@@ -69,11 +68,12 @@ class Edge:
 
 
 class Node:
+
     def __init__(self, node_id):
         self.node_id = node_id
 
     def __str__(self):
-     return str(self.node_id)
+        return str(self.node_id)
 
     def __key(self):
         return tuple(self.__dict__.values())
@@ -135,8 +135,8 @@ class GraphLib:
             [node for node in nodes_list if node.node_id == node_id]
         for pair in edges_line.split():
             first_node_id, second_node_id = map(int, pair.split(","))
-            edges.append((get_node_by_id(first_node_id, nodes),
-                          get_node_by_id(second_node_id, nodes)))
+            edges.append(Edge(get_node_by_id(first_node_id, nodes),
+                              get_node_by_id(second_node_id, nodes)))
         return Graph(directed, nodes, edges)
 
     def read_graph(self, file_path):
