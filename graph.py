@@ -1,20 +1,51 @@
 class Graph:
     def __init__(self, directed=False):
+        """
+
+        :param directed: Ориентирован ли граф
+        """
         self.edges_list = []
         self.nodes_list = []
         self.directed = directed
 
 
 class Edge:
-    def __init__(self, node_in, node_out):
+    def __init__(self, node_in, node_out, weight=None):
+        """
+        :param node_in:  в которое входит ребро
+        :param node_out: из которого выходит ребро
+        :return:
+        """
         self.node_in = node_in
         self.node_out = node_out
-        self.weight = 0
+        self.edge_weight = weight
+
+    def incidence_to_node(self, node):
+        """
+        Проверяет на инцидентность данное ребро
+        с переданной вершиной
+        :param node: переданная вершина
+        :return: -1 если этот узел - исток, 1 если сток, 0 если не инцидентно
+        """
+        return node.incidence_to_edge(self)
 
 
 class Node:
     def __init__(self, node_id):
         self.node_id = node_id
+
+    def incidence_to_edge(self, edge):
+        """
+        Проверяет на инцидентность с ребром
+        :param edge: ребро для проверки
+        :return: -1 если этот узел - исток, 1 если сток, 0 если не инцидентно
+        """
+        if self == edge.node_in:
+            return -1
+        elif self == edge.node_out:
+            return 1
+        else:
+            return 0
 
 
 class GraphLib:
