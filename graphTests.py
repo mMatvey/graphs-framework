@@ -9,7 +9,7 @@ def generate_graph():
     :return: random graph
     """
     directed, edges, nodes = generate_random_params()
-    return Graph(directed, edges, nodes)
+    return Graph(directed, nodes, edges)
 
 
 def generate_random_params():
@@ -33,7 +33,7 @@ def generate_random_params():
                                   nodes[randint(0, len(nodes)-1)]
         edges_set.add(Edge(first_node, second_node))
     edges = list(edges_set)
-    return directed, edges, nodes
+    return directed, nodes, edges
 
 def generate_random_params_strings():
     """
@@ -56,7 +56,7 @@ def generate_random_params_strings():
     edges = ""
     for pair in list(edges_set):
         edges += str(pair[0]) + "," + str(pair[1]) + " "
-    return directed, edges, nodes
+    return directed, nodes, edges
 
 class TestGraphClasses(unittest.TestCase):
 
@@ -74,16 +74,16 @@ class TestGraphClasses(unittest.TestCase):
 
     def test_graph_creation(self):
         for i in range(0, 5):
-            directed, edges, nodes = generate_random_params()
-            graph = Graph(directed, edges, nodes)
+            directed,nodes, edges  = generate_random_params()
+            graph = Graph(directed, nodes, edges)
             self.assertEqual(directed, graph.directed)
             self.assertEqual(edges, graph.edges_list)
             self.assertEqual(nodes, graph.nodes_list)
 
     def test_graph_creation_by_strings(self):
         for i in range(0, 5):
-            directed, edges, nodes = generate_random_params_strings()
-            graph = Graph(directed, edges, nodes)
+            directed, nodes, edges = generate_random_params_strings()
+            graph = Graph(directed, nodes, edges)
             self.assertEqual(directed, graph.directed)
             self.assertEqual(edges, graph.edges_list)
             self.assertEqual(nodes, graph.nodes_list)

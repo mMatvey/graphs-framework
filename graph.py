@@ -1,5 +1,5 @@
 class Graph:
-    def __init__(self, directed=False, edges_list=[], nodes_list=[]):
+    def __init__(self, directed=False, nodes_list=[], edges_list=[] ):
         """
         :param nodes_list: список узлов [Node, Node, ...]
         :param edges_list: список рёбер [Edge, Edge, ...]
