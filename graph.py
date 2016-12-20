@@ -30,7 +30,7 @@ class GraphLib:
           Пример:
         ----------
         >>> a = GraphLib()
-        >>> a.read_graph('./graph3.txt')
+        >>> A.read_graph('./graph3.txt')
         ----------
         :param file_path: путь к файлу, из которого читаем данные
         :return:
@@ -50,9 +50,9 @@ class GraphLib:
           Пример:
         ----------
         >>> a = GraphLib()
-        >>> a.read_graph('./graph1.txt')
-        >>> a.convert_to_adjacency_matrix()
-        >>> print(a.matrix_adjacency)
+        >>> A.read_graph('./graph1.txt')
+        >>> A.convert_to_adjacency_matrix()
+        >>> print(A.matrix_adjacency)
         ----------
         :return:
         """
@@ -70,8 +70,8 @@ class GraphLib:
           Пример:
         ----------
         >>> a = GraphLib()
-        >>> a.read_graph('./graph3.txt')
-        >>> a.convert_to_adjacency_list()
+        >>> A.read_graph('./graph3.txt')
+        >>> A.convert_to_adjacency_list()
         ----------
         :return:
         """
@@ -90,8 +90,8 @@ class GraphLib:
           Пример:
         ----------
         >>> a = GraphLib()
-        >>> a.read_graph('./graph3.txt')
-        >>> a.convert_to_adjacency_matrix()
+        >>> A.read_graph('./graph3.txt')
+        >>> A.convert_to_adjacency_matrix()
         ----------
         :return:
         """
@@ -105,14 +105,14 @@ class GraphLib:
 
     def convert_from_list_to_adjacency_matrix(self):
         """
-         Преобразование из списка, который хранится в файле, в матрицу
+        Преобразование из списка, который хранится в файле, в матрицу
         Предварительно необходимо прочитать файл
         ----------
           Пример:
         ----------
         >>> a = GraphLib()
-        >>> a.read_graph('./graph3.txt')
-        >>> a.convert_to_adjacency_matrix()
+        >>> A.read_graph('./graph3.txt')
+        >>> A.convert_to_adjacency_matrix()
         ----------
         :return:
         """
@@ -130,12 +130,9 @@ class GraphLib:
         """
         Сохраняем в файл матрицу смежности
         ----------
-        Аргументы:
-        ----------
-        ----------
           Пример:
         ----------
-        >>> a.save_in_file_matrix_view('./graph2.txt')
+        >>> A.save_in_file_matrix_view('./graph2.txt')
         ----------
         :param file_path: путь к файлу, в который сохраняем
         :return:
@@ -159,7 +156,7 @@ class GraphLib:
         ----------
           Пример:
         ----------
-        >>> a.save_in_file_list_view('./graph2.txt')
+        >>> A.save_in_file_list_view('./graph2.txt')
         ----------
         :param file_path: путь к файлу, в который сохраняем
         :return:
@@ -181,7 +178,7 @@ class GraphLib:
         ----------
           Пример:
         ----------
-        >>> a.add_vertex_in_matrix()
+        >>> A.add_vertex_in_matrix()
         ----------
         :return:
         """
@@ -199,7 +196,7 @@ class GraphLib:
         ----------
           Пример:
         ----------
-        >>> a.add_vertex_in_list()
+        >>> A.add_vertex_in_list()
         ----------
         :return:
         """
@@ -212,52 +209,48 @@ class GraphLib:
         ----------
           Пример:
         ----------
-        >>> a.delete_vertex_from_list(3)
+        >>> A.delete_vertex_from_list(3)
         ----------
         :param num_vertex: номер вершины, которую удаляем
         :return:
         """
-        for i, key in enumerate(self.adjacency_list):
-            for j in range(len(self.adjacency_list[i])):
-                if num_vertex == self.adjacency_list[i][j]:
-                    del self.adjacency_list[i][j]
-                    break
         del self.adjacency_list[num_vertex]
+        for i in self.adjacency_list:
+            if num_vertex in self.adjacency_list[i]:
+                self.adjacency_list[i].remove(num_vertex)
 
-    # def delete_vertex_from_matrix(self, num_vertex):
-        '''
+    def delete_vertex_from_matrix(self, num_vertex):
+        """
         Удаляем вершину из списка смежности
 
-        ----------
-        Аргументы:
-        ----------
         num_vertex - номер вершины, которую удаляем
         ----------
           Пример:
         ----------
-        >>> a.delete_vertex_from_list(3)
+        >>> A.delete_vertex_from_list(3)
         ----------
-        '''
+        """
+        del self.matrix_adjacency[num_vertex]
+        for i in range(len(self.matrix_adjacency)):
+            del self.matrix_adjacency[i][num_vertex]
 
 
-
-
-a = GraphLib()
-a.read_graph('./graph1.txt')
-a.convert_to_adjacency_matrix()
-#print(a.graph_file_data)
-#print(a.matrix_adjacency)
-a.convert_from_matrix_to_adjacency_list()
-#print(a.adjacency_list)
-#a.save_in_file_matrix_view('./graph2.txt')
-#a.convert_to_adjacency_list()
-#a.save_in_file_list_view('./graph2.txt')
-#print(a.adjacency_list)
-#a.convert_from_list_to_adjacency_matrix()
-a.add_vertex_in_matrix()
-a.add_vertex_in_list()
-a.delete_vertex_from_list(4)
-
+A = GraphLib()
+A.read_graph('./graph1.txt')
+A.convert_to_adjacency_matrix()
+#print(A.graph_file_data)
+#print(A.matrix_adjacency)
+A.convert_from_matrix_to_adjacency_list()
+#print(A.adjacency_list)
+A.save_in_file_matrix_view('./graph2.txt')
+#A.convert_to_adjacency_list()
+#A.save_in_file_list_view('./graph2.txt')
+#print(A.adjacency_list)
+#A.convert_from_list_to_adjacency_matrix()
+A.add_vertex_in_matrix()
+A.add_vertex_in_list()
+#A.delete_vertex_from_list(4)
+A.delete_vertex_from_matrix(4)
 
 #графы оргафы 
 #сохранение в файл
