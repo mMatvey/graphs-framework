@@ -1,21 +1,12 @@
 import unittest
-from graph import Node, Edge, Graph, GraphLib
+from graph import *
 from random import randint
-
-
-def generate_graph():
-    """
-    create graph with random nodes, edges, directed
-    :return: random graph
-    """
-    directed, edges, nodes = generate_random_params()
-    return Graph(directed, nodes, edges)
 
 
 def generate_random_params():
     """
     create random list nodes, edges and random bool directed
-    :return: bool, liest_edges, list_nodes
+    :return: bool, list_edges, list_nodes
     """
     directed = bool(randint(0, 1))
     nodes_number = randint(5, 25)
@@ -38,7 +29,7 @@ def generate_random_params():
 
 def generate_random_params_strings():
     """
-    params in string for parsing testing, creating grapth from strings
+    params in string for parsing testing, creating graph from strings
     :return:
     """
     directed = bool(randint(0, 1))
@@ -60,19 +51,7 @@ def generate_random_params_strings():
     return directed, nodes, edges
 
 
-class TestGraphClasses(unittest.TestCase):
-
-    def test_incidences(self):
-        node1 = Node(1)
-        node2 = Node(2)
-        node0 = Node(0)
-        edge = Edge(node1, node2)
-        self.assertEqual(node1.incidence_to_edge(edge), -1)
-        self.assertEqual(node2.incidence_to_edge(edge), 1)
-        self.assertEqual(node0.incidence_to_edge(edge), 0)
-        self.assertEqual(edge.incidence_to_node(node1), -1)
-        self.assertEqual(edge.incidence_to_node(node2), 1)
-        self.assertEqual(edge.incidence_to_node(node0), 0)
+class TestGraphCreation(unittest.TestCase):
 
     def test_graph_creation(self):
         for i in range(0, 5):
@@ -89,8 +68,6 @@ class TestGraphClasses(unittest.TestCase):
             self.assertEqual(directed, graph.directed)
             self.assertEqual(edges, graph.edges_list)
             self.assertEqual(nodes, graph.nodes_list)
-
-
 
 
 if __name__ == '__main__':

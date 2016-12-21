@@ -8,6 +8,7 @@ class Graph:
         self.edges_list = edges_list
         self.nodes_list = nodes_list
         self.directed = directed
+        # TODO: exception когда вершины не с уникальными id
 
     def __str__(self):
         nodes_string = ""
@@ -32,6 +33,57 @@ class Graph:
         """
         return GraphLib.graph_to_list(self)
 
+    def get_adjacency_list(self, node):
+        """
+        Получить список смежных вершин для переданной вершины
+        в текущем графе
+        :param node: Node
+        :return: [Node, Node, Node]
+        """
+        adj = []
+        for edge in self.edges_list:
+            incidence_to_edge = node.incidence_to_edge(edge)
+            if incidence_to_edge:
+                adj.append(edge.node_out if incidence_to_edge == -1
+                           else edge.node_in)
+        return adj
+
+    def adjacency_to_node(self, first_node, second_node):
+        """
+        Проверяеим являются ли переданные вершины смежными
+        :param first_node: Node
+        :param second_node: Node
+        :return: True/False
+        """
+        return bool(second_node in self.get_adjacency_list(first_node))
+
+    def get_node_by_id(self, node_id):
+        """
+        Возвращает вершину графу по переданному id
+        :param node_id: переданный id
+        :return: Node
+        """
+        return [node for node in self.nodes_list
+                if node.node_id == node_id][0]
+
+    def get_adjacency_list_by_id(self, node_id):
+        """
+        Список смежных вершин для вершины с переданным id
+        в текущем графе
+        :param node_id: id нужной вершины
+        :return: list [Node Node Node]
+        """
+        return self.get_adjacency_list(self.get_node_by_id(node_id))
+
+    def adjacency_to_node_by_id(self, first_node_id, second_node_id):
+        """
+        Проверка на смежность для вершин с переданным id в текущем графе
+        :param first_node_id:
+        :param second_node_id:
+        :return: True\False
+        """
+        return self.get_node_by_id(first_node_id) in \
+               self.get_adjacency_list_by_id(second_node_id)
 
 class Edge:
 
@@ -44,9 +96,10 @@ class Edge:
         self.node_in = node_in
         self.node_out = node_out
         self.edge_weight = weight
+        # TODO: exception когда одной из вершин нет
 
     def __str__(self):
-        return str(self.node_in) + ", " + str(self.node_out) + " "
+        return str(self.node_in) + "," + str(self.node_out) + " "
 
     def __key(self):
         return tuple(self.__dict__.values())
@@ -96,13 +149,6 @@ class Node:
             return 1
         else:
             return 0
-#не справился
-    def adjacency_list(self, graph):
-        adj = []
-        for i in graph.edges_list:
-            if (i.incidence_to_node(i.node_in) and i.incidence_to_node(i.node_out)):
-                adj.append(i.node_out)
-        return adj
 
 
 class GraphLib:
