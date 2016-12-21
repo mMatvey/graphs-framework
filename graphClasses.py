@@ -11,12 +11,12 @@ class Graph:
         :param directed: Ориентирован ли граф [True, False]
         """
         self.directed = directed
-        self.nodes_list = nodes_list
+        self._nodes_list = nodes_list
         check_ids = self.__check_uniques_nodes_ids__()
         if check_ids:
             raise GraphCreationException("Вершины графа имеют неуникальный идентификатор: " +
                                          str(check_ids))
-        self.edges_list = edges_list
+        self._edges_list = edges_list
 
     def __check_uniques_nodes_ids__(self):
         """
@@ -26,12 +26,47 @@ class Graph:
         если нет повторов - False
         """
         uniq_nodes = set()
-        for node in self.nodes_list:
+        for node in self._nodes_list:
             if node in uniq_nodes:
                 return node.node_id
             else:
                 uniq_nodes.add(node)
         return 0
+
+    def get_sorted_edges(self, key_func=False, reversed=False):
+        """
+        Возвращает отсортированный по возврастанию веса
+        список рёбер(если key не указан)
+        :param key_func: функция, принимающая каждое ребро
+         и возвращающая ключ для сравнения (см default ниже)
+         :param reversed: развернуть порядок следования
+        :return: list(Edge Edge Edge)
+        """
+        default_key = lambda edge: edge.edge_weight  # вернуть вес переданного ребра
+        if not key_func:
+            return sorted(self._edges_list, key=default_key, reverse=reversed)
+        else:
+            return sorted(self._edges_list, key=key_func, reverse=reversed)
+
+    def add_node(self, node):
+        """
+        Необходимо добавлять вершины через этот метод!
+        чтобы избежать повторов индификаторов
+        :param node:
+        """
+        self._nodes_list.append(node)
+        check_ids = self.__check_uniques_nodes_ids__()
+        if check_ids:
+            raise GraphException("Индификатор уже занят: " + str(node))
+
+    def add_edge(self, edge):
+        """
+        Добавляет ребро в список рёбер графа
+        :param edge:
+        :return:
+        """
+        self._edges_list.append(edge)
+
 
     def nodes_to_string(self):
         """
@@ -39,7 +74,7 @@ class Graph:
         :return: string: Node_id Node_id Node_id
         """
         nodes_string = ""
-        for node in self.nodes_list:
+        for node in self._nodes_list:
             nodes_string += str(node) + " "
         return nodes_string
 
@@ -52,7 +87,7 @@ class Graph:
         :return:str
         """
         edges_string = ""
-        for edge in self.edges_list:
+        for edge in self._edges_list:
             edges_string += str(edge) + " "
         return edges_string
 
@@ -81,7 +116,7 @@ class Graph:
         :return: [Node, Node, Node]
         """
         adj = []
-        for edge in self.edges_list:
+        for edge in self._edges_list:
             incidence_to_edge = node.incidence_to_edge(edge)
             if incidence_to_edge:
                 adj.append(edge.node_in if incidence_to_edge == -1
@@ -103,7 +138,7 @@ class Graph:
         :param node_id: переданный id
         :return: Node
         """
-        return [node for node in self.nodes_list
+        return [node for node in self._nodes_list
                 if node.node_id == node_id][0]
 
     def get_adjacency_list_by_id(self, node_id):
