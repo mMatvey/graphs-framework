@@ -1,21 +1,14 @@
 import unittest
-from graph import Node, Edge, Graph, GraphLib
+from graphClasses import Node, Graph, Edge
+from graph import GraphLib
 from random import randint
-
-
-def generate_graph():
-    """
-    create graph with random nodes, edges, directed
-    :return: random graph
-    """
-    directed, edges, nodes = generate_random_params()
-    return Graph(directed, nodes, edges)
+from graphExceptions import *
 
 
 def generate_random_params():
     """
     create random list nodes, edges and random bool directed
-    :return: bool, liest_edges, list_nodes
+    :return: bool, list_edges, list_nodes
     """
     directed = bool(randint(0, 1))
     nodes_number = randint(5, 25)
@@ -38,7 +31,7 @@ def generate_random_params():
 
 def generate_random_params_strings():
     """
-    params in string for parsing testing, creating grapth from strings
+    params in string for parsing testing, creating graph from strings
     :return:
     """
     directed = bool(randint(0, 1))
@@ -60,19 +53,7 @@ def generate_random_params_strings():
     return directed, nodes, edges
 
 
-class TestGraphClasses(unittest.TestCase):
-
-    def test_incidences(self):
-        node1 = Node(1)
-        node2 = Node(2)
-        node0 = Node(0)
-        edge = Edge(node1, node2)
-        self.assertEqual(node1.incidence_to_edge(edge), -1)
-        self.assertEqual(node2.incidence_to_edge(edge), 1)
-        self.assertEqual(node0.incidence_to_edge(edge), 0)
-        self.assertEqual(edge.incidence_to_node(node1), -1)
-        self.assertEqual(edge.incidence_to_node(node2), 1)
-        self.assertEqual(edge.incidence_to_node(node0), 0)
+class TestGraphCreation(unittest.TestCase):
 
     def test_graph_creation(self):
         for i in range(0, 5):
@@ -84,11 +65,48 @@ class TestGraphClasses(unittest.TestCase):
 
     def test_graph_creation_by_strings(self):
         for i in range(0, 5):
-            directed, nodes, edges = generate_random_params_strings()
-            graph = Graph(directed, nodes, edges)
+            directed, nodes_str, edges_str = generate_random_params_strings()
+            graph = Graph.create_graph_from_strings(directed,
+                                                    nodes_str,
+                                                    edges_str)
+            nodes = []
+            edges = []
+            for node in nodes_str.split():
+                nodes.append(Node(int(node)))
+            for pair in edges_str.split():
+                pair = pair.split(",")
+                edges.append(Edge(Node(int(pair[0])),
+                                  Node(int(pair[1]))))
             self.assertEqual(directed, graph.directed)
-            self.assertEqual(edges, graph.edges_list)
             self.assertEqual(nodes, graph.nodes_list)
+            self.assertEqual(edges, graph.edges_list)
+
+
+    def test_ununiq_nodes_ids(self):
+        nodes_ununiq_ids = [Node(randint(1,100)), Node(randint(1,100))]
+        nodes_ununiq_ids.append(nodes_ununiq_ids[randint(0,1)])
+        edges = [Edge(nodes_ununiq_ids[0],
+                      nodes_ununiq_ids[1])]
+        try:
+            graph = Graph(False, nodes_ununiq_ids,
+                          edges)
+            assert False;
+        except GraphCreationException as exception:
+            self.assertEqual(type(exception) == GraphCreationException, True)
+
+    def test_edge_creation(self):
+        try:
+            params = (Node(1), "")
+            edge = Edge(node_in=params[0], node_out=params[1])
+            raise False
+        except EdgeCreationException as exception:
+            self.assertEqual(type(exception) == EdgeCreationException, True)
+        try:
+            params = (None, Node(1))
+            edge = Edge(params[0], params[1])
+            raise False
+        except EdgeCreationException as exception:
+            self.assertEqual(type(exception) == EdgeCreationException, True)
 
 
 
