@@ -4,7 +4,7 @@ from graphExceptions import *
 
 class Graph:
 
-    def __init__(self, directed=False, nodes_list=[], edges_list=[] ):
+    def __init__(self, directed=False, nodes_list=[], edges_list=[]):
         """
         :param nodes_list: список узлов [Node, Node, ...]
         :param edges_list: список рёбер [Edge, Edge, ...]
@@ -14,10 +14,9 @@ class Graph:
         self.nodes_list = nodes_list
         check_ids = self.__check_uniques_nodes_ids__()
         if check_ids:
-            raise GraphCreationException("Вершины графа имеют неуникальный идентификатор: " + \
+            raise GraphCreationException("Вершины графа имеют неуникальный идентификатор: " +
                                          str(check_ids))
         self.edges_list = edges_list
-        # TODO: exception когда вершины не с уникальными id
 
     def __check_uniques_nodes_ids__(self):
         """
@@ -34,16 +33,33 @@ class Graph:
                 uniq_nodes.add(node)
         return 0
 
-    def __str__(self):
+    def nodes_to_string(self):
+        """
+        Возвращает строку - id вершин через пробелы
+        :return: string: Node_id Node_id Node_id
+        """
         nodes_string = ""
         for node in self.nodes_list:
             nodes_string += str(node) + " "
+        return nodes_string
+
+    def edges_to_string(self):
+        """
+        Возвращает строку - рёбра в формате
+        node_id_out,node_id_in:weight weight > 0
+        node_id_out,node_id_in weight==0
+        через пробел
+        :return:str
+        """
         edges_string = ""
         for edge in self.edges_list:
             edges_string += str(edge) + " "
+        return edges_string
+
+    def __str__(self):
         return "Directed?: " + str(self.directed) + '\n' \
-                + "Nodes: " + nodes_string + '\n' \
-                + "Edges: " + edges_string
+            + "Nodes: " + self.nodes_to_string() + '\n' \
+            + "Edges: " + self.edges_to_string()
 
     def get_matrix(self):
         """
@@ -144,6 +160,13 @@ class Graph:
                               get_node_by_id(second_node_id, nodes)))
         return Graph(directed, nodes, edges)
 
+    def _create_notDirectedGraph_string(self, nodes_line, edges_line, directed=False):
+        """
+
+        :param nodes_line:
+        :param edges_line:
+        :return:
+        """
 
 class Edge:
 
@@ -160,7 +183,19 @@ class Edge:
             raise EdgeCreationException("Вершины должны быть одного типа")
 
     def __str__(self):
-        return str(self.node_in) + "," + str(self.node_out) + " "
+        """
+        Возвращает строку - рёбра в формате
+        node_id_out,node_id_in:weight weight > 0
+        node_id_out,node_id_in weight==0
+        через пробел
+        :return: string
+        """
+        weight_str = ""
+        if self.edge_weight:
+            weight_str = ":" + str(self.edge_weight)
+        else:
+            weight_str = ""
+        return str(self.node_out) + "," + str(self.node_in) + weight_str
 
     def __key(self):
         return tuple(self.__dict__.values())
