@@ -1,4 +1,4 @@
-from graph import GraphLib
+#from graph import GraphLib
 from graphExceptions import *
 
 
@@ -106,7 +106,15 @@ class Graph:
         """
         Получаем список смежности
         """
-        return GraphLib.graph_to_list(self)
+        adj_list = {}
+        for i in range(len(self._nodes_list)):
+            adj_list[i] = self.get_adjacency_list_by_id(i+1)
+        for i in range(len(self._nodes_list)):
+            for j in range(len(adj_list[i])):
+                adj_list[i][j] = adj_list[i][j].node_id
+        for i in range(len(self._nodes_list)):
+            adj_list[i] = set(adj_list[i])
+        return adj_list
 
     def get_adjacency_list(self, node):
         """
