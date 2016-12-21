@@ -96,15 +96,9 @@ class Graph:
             + "Nodes: " + self.nodes_to_string() + '\n' \
             + "Edges: " + self.edges_to_string()
 
-    def get_matrix(self):
-        """
-        Получаем матрицу смежности
-        """
-        return GraphLib.graph_to_matrix(self)
-
     def get_list(self):
         """
-        Получаем список смежности
+        Получаем список смежности для обхода
         """
         adj_list = {}
         for i in range(len(self._nodes_list)):
@@ -221,7 +215,7 @@ class Graph:
                 data += line
             graph_file_data = data.splitlines()
             file.close()
-        for i,key in enumerate(graph_file_data):
+        for i, key in enumerate(graph_file_data):
             graph_file_data[i] = key.split(": ")[1]
         self.directed = graph_file_data[0]
         self.nodes_list.append(int(graph_file_data[1].split()))
@@ -332,3 +326,12 @@ class Node:
             return 1
         else:
             return 0
+
+class Matrix:
+    def __init__(self, matrix=[]):
+        self.matrix = matrix
+
+    def print_matrix(self):
+        #for i in range(len(self.matrix)):
+        for row in self.matrix:
+            print(row)
