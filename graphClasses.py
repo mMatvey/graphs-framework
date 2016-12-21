@@ -154,12 +154,20 @@ class Graph:
         edges = []
         get_node_by_id = lambda node_id, nodes_list: \
             [node for node in nodes_list if node.node_id == node_id][0]
-        for pair in edges_line.split():
-            first_node_id, second_node_id = map(int, pair.split(","))
+        import re
+        for pair in edges_line.split():  # dec,dec:dec
+            weight = 0
+            reg_expr = re.match(r'(\d+),(\d+):?(\d+)?', pair)
+            first_node_id = int(reg_expr.group(1))
+            second_node_id = int(reg_expr.group(2))
+            if reg_expr.group(3):
+                weight = int(reg_expr.group(3))
             edges.append(Edge(get_node_by_id(first_node_id, nodes),
-                              get_node_by_id(second_node_id, nodes)))
+                              get_node_by_id(second_node_id, nodes),
+                              weight))
         return Graph(directed, nodes, edges)
 
+<<<<<<< HEAD
     def _create_notDirectedGraph_string(self, nodes_line, edges_line, directed=False):
         """
 
@@ -176,9 +184,11 @@ class Graph:
         """
         
 
+=======
+>>>>>>> 89f0ff4d5c24b83b6a0528b72f68878d7e7f3422
 class Edge:
 
-    def __init__(self, node_out, node_in, weight=None):
+    def __init__(self, node_out, node_in, weight=0):
         """
         :param node_in:  в которое входит ребро
         :param node_out: из которого выходит ребро
