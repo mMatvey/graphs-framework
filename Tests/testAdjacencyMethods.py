@@ -1,5 +1,5 @@
 import unittest
-from graphClasses import *
+from Tests.testsUtils import *
 
 
 class TestAdjacencyMethods(unittest.TestCase):
