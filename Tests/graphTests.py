@@ -1,6 +1,5 @@
 import unittest
-
-from graph import *
+from graphClasses import *
 
 
 def generate_graph():
@@ -8,7 +7,7 @@ def generate_graph():
     create graph with random nodes, edges, directed
     :return: random graph
     """
-    from Tests.testGraphCreation import  generate_random_params
+    from Tests.testGraphCreation import generate_random_params
     directed, edges, nodes = generate_random_params()
     return Graph(directed, nodes, edges)
 
