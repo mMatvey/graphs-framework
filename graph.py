@@ -51,8 +51,8 @@ class Edge:
     def __key(self):
         return tuple(self.__dict__.values())
 
-    def __eq__(x, y):
-        return x.__key() == y.__key()
+    def __eq__(self, other):
+        return self.__key() == other.__key()
 
     def __hash__(self):
         return hash(self.__key())
@@ -78,8 +78,8 @@ class Node:
     def __key(self):
         return tuple(self.__dict__.values())
 
-    def __eq__(x, y):
-        return x.__key() == y.__key()
+    def __eq__(self, other):
+        return self.__key() == other.__key()
 
     def __hash__(self):
         return hash(self.__key())
@@ -142,12 +142,6 @@ class GraphLib:
     def read_graph(self, file_path):
         """
         Читаем данные из файла
-        ----------
-          Пример:
-        ----------
-        >>> a = GraphLib()
-        >>> A.read_graph('./graph3.txt')
-        ----------
         :param file_path: путь к файлу, из которого читаем данные
         :return:
         """
@@ -182,13 +176,6 @@ class GraphLib:
         """
         Заполняем список смежности,
         если загрузили из файла список смежности
-        ----------
-          Пример:
-        ----------
-        >>> a = GraphLib()
-        >>> A.read_graph('./graph3.txt')
-        >>> A.convert_to_adjacency_list()
-        ----------
         :return:
         """
         for i in range(len(self.graph_file_data)):
