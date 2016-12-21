@@ -96,6 +96,13 @@ class Node:
             return 1
         else:
             return 0
+#не справился
+    def adjacency_list(self, graph):
+        adj = []
+        for i in graph.edges_list:
+            if (i.incidence_to_node(i.node_in) and i.incidence_to_node(i.node_out)):
+                adj.append(i.node_out)
+        return adj
 
 
 class GraphLib:
@@ -382,9 +389,46 @@ class GraphLib:
                     adjs.append(v)
             self.adjacency_list[i] = adjs
         return self.adjacency_list
+    @classmethod
+    def prepare_to_traversal(cls, graph):
+        """
+        :param graph: список смежности
+        :return sets: множество, равное списку смежности:
+        """
+        sets = {}
+        for i in graph:
+            sets[i] = set(graph[i])
+        return sets
+    @classmethod
+    def dfs(cls, graph, start, visited=None):
+        """
+        :param graph: множество, равное списку смежности
+        :param start: начало прохода
+        :return visited: множество посещенных вершин
+        """
+        if visited is None:
+            visited = set()
+        visited.add(start)
+        for next in graph[start] - visited:
+            cls.dfs(graph, next, visited)
+        return visited
+    @classmethod
+    def bfs(cls, graph, start):
+        """
+        :param graph: множество, равное списку смежности
+        :param start: начало прохода
+        :return visited: множество посещенных вершин
+        """
+        visited, queue = set(), [start]
+        while queue:
+            vertex = queue.pop(0)
+            if vertex not in visited:
+                visited.add(vertex)
+                queue.extend(graph[vertex] - visited)
+        return visited
 
 #A = GraphLib()
-##A.read_graph('./graph1.txt')
+#A.read_graph('./graph1.txt')
 #A.convert_to_adjacency_matrix()
 #print(A.graph_file_data)
 #print(A.matrix_adjacency)
@@ -406,7 +450,11 @@ if __name__ == '__main__':
     wtf = GraphLib.read_graph_console_input()
     print(str(wtf))
     input()
-
+    #A = GraphLib()
+    #A.read_graph('./graph3.txt')
+    #A.convert_to_adjacency_list()
+    #print(A.dfs(A.prepare_to_traversal(A.adjacency_list), 5))
+    #print(A.dfs(A.prepare_to_traversal(A.adjacency_list), 1))
 #графы оргафы 
 #сохранение в файл
 #матрица смежности, список смежности, список инцидентности
