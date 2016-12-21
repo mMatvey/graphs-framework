@@ -1,6 +1,7 @@
 #from graph import GraphLib
 from graphExceptions import *
 from graphElement import *
+from graphAlgorithms import *
 
 class Graph:
 
@@ -73,35 +74,6 @@ class Graph:
                               get_node_by_id(second_node_id, nodes),
                               weight))
         return Graph(directed, nodes, edges)
-
-    @classmethod
-    def dfs(cls, graph, start, visited=None):
-        """
-        :param graph: множество, равное списку смежности
-        :param start: начало прохода
-        :return visited: множество посещенных вершин
-        """
-        if visited is None:
-            visited = set()
-        visited.add(start)
-        for next in graph[start] - visited:
-            cls.dfs(graph, next, visited)
-        return visited
-
-    @classmethod
-    def bfs(cls, graph, start):
-        """
-        :param graph: множество, равное списку смежности
-        :param start: начало прохода
-        :return visited: множество посещенных вершин
-        """
-        visited, queue = set(), [start]
-        while queue:
-            vertex = queue.pop(0)
-            if vertex not in visited:
-                visited.add(vertex)
-                queue.extend(graph[vertex] - visited)
-        return visited
 
     def __check_uniques_nodes_ids__(self):
         """
