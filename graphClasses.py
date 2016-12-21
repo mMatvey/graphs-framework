@@ -252,22 +252,16 @@ class Graph:
             edges_line = re.findall(r"Edges:((\s+\d+,\d+:?\d*)+)", text)[0][0]
             return Graph.create_graph_from_strings(str(directed), nodes_line, edges_line)
 
-    def get_matrix(self):
-        """
-        Получаем матрицу смежности
-        """
-        return GraphLib.graph_to_matrix(self)
-
     def get_list(self):
         """
-        Получаем список смежности
+        Получаем список смежности для обхода
         """
         adj_list = {}
         for i in range(len(self._nodes_list)):
-            adj_list[i] = self.get_adjacency_list_by_id(i+1)
+            adj_list[i] = self.get_adjacency_list_by_id(i)
         for i in range(len(self._nodes_list)):
             for j in range(len(adj_list[i])):
-                adj_list[i][j] = adj_list[i][j].node_id - 1
+                adj_list[i][j] = adj_list[i][j].node_id
         for i in range(len(self._nodes_list)):
             adj_list[i] = set(adj_list[i])
         return adj_list
@@ -323,6 +317,85 @@ class Graph:
         """
         return self.get_node_by_id(first_node_id) in \
             self.get_adjacency_list_by_id(second_node_id)
+
+
+    @classmethod
+    def read_graph_console_input(cls):
+        """
+        После диалога с пользователем возвращает заданным им граф
+        :return: new Graph object
+        """
+        directed_line = input("Граф ориентированный?(пустая строка - нет): ")
+        nodes_line = input("Введити номера узлов через пробел: ")
+        edges_line = input("Введити рёбра( node1,node2 node3,node4): ")
+        return Graph.create_graph_from_strings(directed_line, nodes_line, edges_line)
+
+    @classmethod
+    def create_graph_from_strings(cls, directed_line, nodes_line, edges_line):
+        """
+        Создаёт граф на основе переданных строк с консоли или считанных из файла
+        :rtype: Graph
+        :param directed_line: Если пусто\0  - граф неориентированный
+        :param nodes_line: формат "node_id1 node_id2 node_id3"
+        :param edges_line: формат "node_id1,node_id2 node_id3,node_id4"
+        :return: new Graph object
+        """
+        directed = bool(directed_line)
+        nodes_ids = list(map(int, nodes_line.split()))  # from str to int
+        nodes = []
+        for node_id in nodes_ids:
+            nodes.append(Node(node_id))
+        edges = []
+        get_node_by_id = lambda node_id, nodes_list: \
+            [node for node in nodes_list if node.node_id == node_id][0]
+        import re
+        for pair in edges_line.split():  # dec,dec:dec
+            weight = 0
+            reg_expr = re.match(r'(\d+),(\d+):?(\d+)?', pair)
+            first_node_id = int(reg_expr.group(1))
+            second_node_id = int(reg_expr.group(2))
+            if reg_expr.group(3):
+                weight = int(reg_expr.group(3))
+            edges.append(Edge(get_node_by_id(first_node_id, nodes),
+                              get_node_by_id(second_node_id, nodes),
+                              weight))
+        return Graph(directed, nodes, edges)
+
+
+    @classmethod
+    def dfs(cls, graph, start, visited=None):
+        """
+        :param graph: множество, равное списку смежности
+        :param start: начало прохода
+        :return visited: множество посещенных вершин
+        """
+        if visited is None:
+            visited = set()
+        visited.add(start)
+        for next in graph[start] - visited:
+            cls.dfs(graph, next, visited)
+        return visited
+
+    @classmethod
+    def bfs(cls, graph, start):
+        """
+        :param graph: множество, равное списку смежности
+        :param start: начало прохода
+        :return visited: множество посещенных вершин
+        """
+        visited, queue = set(), [start]
+        while queue:
+            vertex = queue.pop(0)
+            if vertex not in visited:
+                visited.add(vertex)
+                queue.extend(graph[vertex] - visited)
+        return visited
+
+    def connected_component(self):
+        if len(self.bfs(self.get_list(), 0)) == len(self._nodes_list):
+            return True
+        else:
+            return False
 
 
 class Edge:
@@ -402,3 +475,53 @@ class Node:
             return 1
         else:
             return 0
+
+class Matrix:
+    def __init__(self,adjacency=True, matrix=[]):
+        self.matrix = matrix
+        self.adjacency = adjacency
+
+    def print_matrix(self):
+        string = ""
+        for i in self.matrix:
+            string += str(i) + "\n"
+        print(string)
+
+    def read_matrix(self, graph):
+        self.matrix = []
+        if self.adjacency:
+            for i in graph._nodes_list:
+                adjs = []
+                for j in graph._edges_list:
+                    inc = i.incidence_to_edge(j)
+                    if inc == 1:
+                        adjs.append(1)
+                    elif inc == -1:
+                        adjs.append(-1)
+                    else:
+                        adjs.append(0)
+                self.matrix.append(adjs)
+        else:
+            for i in graph._nodes_list:
+                value = []
+                for j in graph._edges_list:
+                    if bool(i.incidence_to_edge(j)):
+                        value.append(j.edge_weight)
+                    else:
+                        value.append(0)
+                self.matrix.append(value)
+        return self.matrix
+
+nodes_list = [Node(0), Node(1), Node(2), Node(3)]
+edges_list = [
+    Edge(nodes_list[0], nodes_list[1], 5),
+    Edge(nodes_list[0], nodes_list[2], 3),
+    Edge(nodes_list[1], nodes_list[2], 1),
+    Edge(nodes_list[0], nodes_list[3], 3)
+]
+graph = Graph(False, nodes_list, edges_list)
+print(graph.bfs(graph.get_list(),1))
+print(graph.get_list())
+matrix = Matrix()
+matrix.read_matrix(graph)
+matrix.print_matrix()
