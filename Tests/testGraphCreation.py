@@ -60,8 +60,8 @@ class TestGraphCreation(unittest.TestCase):
             directed, nodes, edges = generate_random_params()
             graph = Graph(directed, nodes, edges)
             self.assertEqual(directed, graph.directed)
-            self.assertEqual(edges, graph.edges_list)
-            self.assertEqual(nodes, graph.nodes_list)
+            self.assertEqual(edges, graph._edges_list)
+            self.assertEqual(nodes, graph._nodes_list)
 
     def test_graph_creation_by_strings(self):
         for i in range(0, 5):
@@ -78,8 +78,8 @@ class TestGraphCreation(unittest.TestCase):
                 edges.append(Edge(Node(int(pair[0])),
                                   Node(int(pair[1]))))
             self.assertEqual(directed, graph.directed)
-            self.assertEqual(nodes, graph.nodes_list)
-            self.assertEqual(edges, graph.edges_list)
+            self.assertEqual(nodes, graph._nodes_list)
+            self.assertEqual(edges, graph._edges_list)
 
 
     def test_ununiq_nodes_ids(self):
