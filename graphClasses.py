@@ -253,23 +253,6 @@ class Graph:
                               weight))
         return Graph(directed, nodes, edges)
 
-    def read_file(self, file_path):
-        """
-        Читает информацию из файла
-        """
-        graph_file_data = []
-        with open(file_path, "r") as file:
-            data = ''
-            for line in file:
-                data += line
-            graph_file_data = data.splitlines()
-            file.close()
-        for i, key in enumerate(graph_file_data):
-            graph_file_data[i] = key.split(": ")[1]
-        self.directed = graph_file_data[0]
-        self.nodes_list.append(int(graph_file_data[1].split()))
-        return graph_file_data
-
     @classmethod
     def dfs(cls, graph, start, visited=None):
         """
@@ -410,24 +393,13 @@ class Matrix:
         else:
             for i in graph._nodes_list:
                 value = []
-                for j in graph._edges_list:
-                    if bool(i.incidence_to_edge(j)):
-                        value.append(j.edge_weight)
-                    else:
+                for j in graph._nodes_list:
+                    if i == j:
                         value.append(0)
+                    else:
+                        for v in graph._edges_list:
+                            if bool(v.incidence_to_node(j)):
+                                value.append(v.edge_weight)
                 self.matrix.append(value)
         return self.matrix
 
-nodes_list = [Node(0), Node(1), Node(2), Node(3)]
-edges_list = [
-    Edge(nodes_list[0], nodes_list[1], 5),
-    Edge(nodes_list[0], nodes_list[2], 3),
-    Edge(nodes_list[1], nodes_list[2], 1),
-    Edge(nodes_list[0], nodes_list[3], 3)
-]
-graph = Graph(False, nodes_list, edges_list)
-print(graph.bfs(graph.get_list(),1))
-print(graph.get_list())
-matrix = Matrix()
-matrix.read_matrix(graph)
-matrix.print_matrix()
