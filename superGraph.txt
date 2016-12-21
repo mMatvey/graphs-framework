@@ -1,0 +1,3 @@
+Directed?: False
+Nodes: 1 2 3 
+Edges: 1,2:5 1,3 2,3:1 
