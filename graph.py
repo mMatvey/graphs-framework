@@ -246,13 +246,8 @@ class GraphLib:
         for i in graph:
             sets[i] = set(graph[i])
         return sets
+
     
-        
-    def connected_component(self):
-        if len(self.bfs(self.prepare_to_traversal(self.adjacency_list), 0)) == len(self.adjacency_list):
-            return True
-        else:
-            return False
 
 #A = GraphLib()
 #A.read_graph('./graph1.txt')

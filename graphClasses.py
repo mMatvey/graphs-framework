@@ -151,10 +151,10 @@ class Graph:
         """
         adj_list = {}
         for i in range(len(self._nodes_list)):
-            adj_list[i] = self.get_adjacency_list_by_id(i+1)
+            adj_list[i] = self.get_adjacency_list_by_id(i)
         for i in range(len(self._nodes_list)):
             for j in range(len(adj_list[i])):
-                adj_list[i][j] = adj_list[i][j].node_id - 1
+                adj_list[i][j] = adj_list[i][j].node_id
         for i in range(len(self._nodes_list)):
             adj_list[i] = set(adj_list[i])
         return adj_list
@@ -298,6 +298,12 @@ class Graph:
                 queue.extend(graph[vertex] - visited)
         return visited
 
+    def connected_component(self):
+        if len(self.bfs(self.get_list(), 0)) == len(self._nodes_list):
+            return True
+        else:
+            return False
+
 class Edge:
 
     def __init__(self, node_out, node_in, weight=0):
@@ -377,10 +383,51 @@ class Node:
             return 0
 
 class Matrix:
-    def __init__(self, matrix=[]):
+    def __init__(self,adjacency=True, matrix=[]):
         self.matrix = matrix
+        self.adjacency = adjacency
 
     def print_matrix(self):
-        #for i in range(len(self.matrix)):
-        for row in self.matrix:
-            print(row)
+        string = ""
+        for i in self.matrix:
+            string += str(i) + "\n"
+        print(string)
+
+    def read_matrix(self, graph):
+        self.matrix = []
+        if self.adjacency:
+            for i in graph._nodes_list:
+                adjs = []
+                for j in graph._edges_list:
+                    inc = i.incidence_to_edge(j)
+                    if inc == 1:
+                        adjs.append(1)
+                    elif inc == -1:
+                        adjs.append(-1)
+                    else:
+                        adjs.append(0)
+                self.matrix.append(adjs)
+        else:
+            for i in graph._nodes_list:
+                value = []
+                for j in graph._edges_list:
+                    if bool(i.incidence_to_edge(j)):
+                        value.append(j.edge_weight)
+                    else:
+                        value.append(0)
+                self.matrix.append(value)
+        return self.matrix
+
+nodes_list = [Node(0), Node(1), Node(2), Node(3)]
+edges_list = [
+    Edge(nodes_list[0], nodes_list[1], 5),
+    Edge(nodes_list[0], nodes_list[2], 3),
+    Edge(nodes_list[1], nodes_list[2], 1),
+    Edge(nodes_list[0], nodes_list[3], 3)
+]
+graph = Graph(False, nodes_list, edges_list)
+print(graph.bfs(graph.get_list(),1))
+print(graph.get_list())
+matrix = Matrix()
+matrix.read_matrix(graph)
+matrix.print_matrix()
