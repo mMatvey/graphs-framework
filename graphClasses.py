@@ -84,8 +84,8 @@ class Graph:
         for edge in self.edges_list:
             incidence_to_edge = node.incidence_to_edge(edge)
             if incidence_to_edge:
-                adj.append(edge.node_out if incidence_to_edge == -1
-                           else edge.node_in)
+                adj.append(edge.node_in if incidence_to_edge == -1
+                           else edge.node_out)
         return adj
 
     def adjacency_to_node(self, first_node, second_node):
@@ -167,25 +167,7 @@ class Graph:
                               weight))
         return Graph(directed, nodes, edges)
 
-<<<<<<< HEAD
-    def _create_notDirectedGraph_string(self, nodes_line, edges_line, directed=False):
-        """
 
-        :param nodes_line:
-        :param edges_line:
-        :return:
-        """
-    def add_edge(self, node_in, node_out):
-        """
-
-        :param nodes_line:
-        :param edges_line:
-        :return:
-        """
-        
-
-=======
->>>>>>> 89f0ff4d5c24b83b6a0528b72f68878d7e7f3422
 class Edge:
 
     def __init__(self, node_out, node_in, weight=0):
@@ -257,9 +239,9 @@ class Node:
         :param edge: ребро для проверки
         :return: -1 если этот узел - исток, 1 если сток, 0 если не инцидентно
         """
-        if self == edge.node_in:
+        if self == edge.node_out:
             return -1
-        elif self == edge.node_out:
+        elif self == edge.node_in:
             return 1
         else:
             return 0
