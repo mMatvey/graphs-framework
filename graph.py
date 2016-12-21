@@ -1,4 +1,4 @@
-#from graphClasses import Node, Graph, Edge
+from graphClasses import *
 
 
 class GraphLib:
@@ -6,8 +6,6 @@ class GraphLib:
         self.graph_file_data = []
         self.matrix_adjacency = []
         self.adjacency_list = {}
-
-
 
     def read_graph(self, file_path):
         """
@@ -310,7 +308,7 @@ class GraphLib:
 #print(A.graph_to_matrix())
 #print(A.graph_to_list())
 if __name__ == '__main__':
-    wtf = GraphLib.read_graph_console_input()
+    wtf = Graph.read_graph_console_input()
     print(str(wtf))
     input()
     #A = GraphLib()

@@ -94,6 +94,21 @@ class TestGraphCreation(unittest.TestCase):
         except GraphCreationException as exception:
             self.assertEqual(type(exception) == GraphCreationException, True)
 
+    def test_edge_creation(self):
+        try:
+            params = (Node(1), "")
+            edge = Edge(node_in=params[0], node_out=params[1])
+            raise False
+        except EdgeCreationException as exception:
+            self.assertEqual(type(exception) == EdgeCreationException, True)
+        try:
+            params = (None, Node(1))
+            edge = Edge(params[0], params[1])
+            raise False
+        except EdgeCreationException as exception:
+            self.assertEqual(type(exception) == EdgeCreationException, True)
+
+
 
 
 if __name__ == '__main__':

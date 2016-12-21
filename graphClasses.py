@@ -147,7 +147,7 @@ class Graph:
 
 class Edge:
 
-    def __init__(self, node_in, node_out, weight=None):
+    def __init__(self, node_out, node_in, weight=None):
         """
         :param node_in:  в которое входит ребро
         :param node_out: из которого выходит ребро
@@ -156,7 +156,8 @@ class Edge:
         self.node_in = node_in
         self.node_out = node_out
         self.edge_weight = weight
-        # TODO: exception когда одной из вершин нет
+        if type(node_in) != type(node_out):
+            raise EdgeCreationException("Вершины должны быть одного типа")
 
     def __str__(self):
         return str(self.node_in) + "," + str(self.node_out) + " "
