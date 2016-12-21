@@ -300,12 +300,13 @@ class GraphLib:
 #print(A.graph_to_matrix())
 #print(A.graph_to_list())
 if __name__ == '__main__':
-    #wtf = Graph.read_graph_console_input()
-    #print(str(wtf))
+    wtf = Graph.read_graph_console_input()
+    print(str(wtf))
+    wtf.write_to_file('./superGraph.txt')
     #input()
-    A = GraphLib()
-    A.read_graph('./graph3.txt')
-    A.convert_to_adjacency_list()
+   # A = GraphLib()
+   # A.read_graph('./graph3.txt')
+   # A.convert_to_adjacency_list()
     #print(A.dfs(A.prepare_to_traversal(A.adjacency_list), 5))
     #print(A.dfs(A.prepare_to_traversal(A.adjacency_list), 1))
 
