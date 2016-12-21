@@ -202,6 +202,24 @@ class Graph:
                               weight))
         return Graph(directed, nodes, edges)
 
+    def read_file(self, file_path):
+        """
+        Читает информацию из файла
+        """
+        graph_file_data = []
+        with open(file_path, "r") as file:
+            data = ''
+            for line in file:
+                data += line
+            graph_file_data = data.splitlines()
+            file.close()
+        for i,key in enumerate(graph_file_data):
+            graph_file_data[i] = key.split(": ")[1]
+        self.directed = graph_file_data[0]
+        self.nodes_list.append(int(graph_file_data[1].split()))
+        return graph_file_data
+        
+        
 
 class Edge:
 

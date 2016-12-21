@@ -209,13 +209,6 @@ class GraphLib:
     def graph_to_matrix(self):
         """
         Получаем из списка смежности матрицу смежности
-
-        num_vertex - номер вершины, которую удаляем
-        ----------
-          Пример:
-        ----------
-        >>> A.convert_to_matrix()
-        ----------
         """
         self.matrix_adjacency = []
         graph_len = len(self.adjacency_list)
@@ -231,13 +224,6 @@ class GraphLib:
     def graph_to_list(self):
         """
         Получаем из списка смежности матрицу смежности
-
-        num_vertex - номер вершины, которую удаляем
-        ----------
-          Пример:
-        ----------
-        >>> A.graph_to_list()
-        ----------
         """
         self.adjacency_list = {}
 
