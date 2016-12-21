@@ -1,15 +1,5 @@
 import unittest
-from graphClasses import *
-
-
-def generate_graph():
-    """
-    create graph with random nodes, edges, directed
-    :return: random graph
-    """
-    from Tests.testGraphCreation import generate_random_params
-    directed, edges, nodes = generate_random_params()
-    return Graph(directed, nodes, edges)
+from Tests.testsUtils import *
 
 
 class TestGraphClasses(unittest.TestCase):
@@ -36,6 +26,8 @@ class TestGraphClasses(unittest.TestCase):
         graph = Graph(False, nodes_list, edges_list)
         self.assertEqual(graph.get_sorted_edges(),
                          [edges_list[2], edges_list[1], edges_list[0]])
+
+
 
 
 if __name__ == '__main__':

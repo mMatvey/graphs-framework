@@ -66,7 +66,56 @@ class Graph:
         :return:
         """
         self._edges_list.append(edge)
+        self._edges_list = set(self._edges_list)  # избавляемся
+        self._edges_list = list(self._edges_list)  # от одинаковых рёбер
 
+    def remove_edge(self, edge):
+        """
+        Удаляет ребро из списка рёбер
+        :param edge:
+        """
+        self._edges_list.remove(edge)
+
+    def get_edge_by_params(self, node_out, node_in, weight=0):
+        """
+        Возвращает ребро по известным вершинам и весу
+        :param node_out: вершина, из которой исходит ребро
+        :param node_in: вершина, в которую входит ребро
+        :param weight: вес ребра
+        :return: Edge
+        """
+        return Edge(node_out=node_out, node_in=node_in, weight=weight)
+
+    def get_edge_by_ids(self, node_out_id, node_in_id, weight=0):
+        """
+        Возвращает ребро по индфикаторам вершин и весу
+        :param node_out_id: индификатор вершины, из которой исходит ребро
+        :param node_in_id: индификатор вершины, в которую исходит ребро
+        :param weight: вес ребра
+        """
+        return self.get_edge_by_params(Node(node_out_id),
+                                       Node(node_in_id),
+                                       weight=weight)
+
+    def remove_node(self, node):
+        """
+        Удаляет вершину из списка и все инцидетные рёбра
+        :param node:
+        """
+        edges_to_remove = []
+        for edge in self._edges_list:
+            if edge.incidence_to_node(node):
+                edges_to_remove.append(edge)
+        self._nodes_list.remove(node)
+        for edge in edges_to_remove:
+            self.remove_edge(edge)
+
+    def remove_node_by_id(self, node_id):
+        """
+        Удалят вершину из списку и все инцидентные рёбра
+        :param node_id: индиикатор вершины
+        """
+        self.remove_node(self.get_node_by_id(node_id))
 
     def nodes_to_string(self):
         """
