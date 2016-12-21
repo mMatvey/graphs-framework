@@ -1,4 +1,4 @@
-from graph import GraphLib
+#from graph import GraphLib
 from graphExceptions import *
 
 
@@ -155,7 +155,15 @@ class Graph:
         """
         Получаем список смежности
         """
-        return GraphLib.graph_to_list(self)
+        adj_list = {}
+        for i in range(len(self._nodes_list)):
+            adj_list[i] = self.get_adjacency_list_by_id(i+1)
+        for i in range(len(self._nodes_list)):
+            for j in range(len(adj_list[i])):
+                adj_list[i][j] = adj_list[i][j].node_id - 1
+        for i in range(len(self._nodes_list)):
+            adj_list[i] = set(adj_list[i])
+        return adj_list
 
     def get_adjacency_list(self, node):
         """
@@ -251,6 +259,50 @@ class Graph:
                               weight))
         return Graph(directed, nodes, edges)
 
+    def read_file(self, file_path):
+        """
+        Читает информацию из файла
+        """
+        graph_file_data = []
+        with open(file_path, "r") as file:
+            data = ''
+            for line in file:
+                data += line
+            graph_file_data = data.splitlines()
+            file.close()
+        for i,key in enumerate(graph_file_data):
+            graph_file_data[i] = key.split(": ")[1]
+        self.directed = graph_file_data[0]
+        self.nodes_list.append(int(graph_file_data[1].split()))
+        return graph_file_data
+
+    @classmethod
+    def dfs(cls, graph, start, visited=None):
+        """
+        :param graph: множество, равное списку смежности
+        :param start: начало прохода
+        :return visited: множество посещенных вершин
+        """
+        if visited is None:
+            visited = set()
+        visited.add(start)
+        for next in graph[start] - visited:
+            cls.dfs(graph, next, visited)
+        return visited
+    @classmethod
+    def bfs(cls, graph, start):
+        """
+        :param graph: множество, равное списку смежности
+        :param start: начало прохода
+        :return visited: множество посещенных вершин
+        """
+        visited, queue = set(), [start]
+        while queue:
+            vertex = queue.pop(0)
+            if vertex not in visited:
+                visited.add(vertex)
+                queue.extend(graph[vertex] - visited)
+        return visited
 
 class Edge:
 
