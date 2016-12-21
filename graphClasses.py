@@ -167,6 +167,14 @@ class Graph:
         :param edges_line:
         :return:
         """
+    def add_edge(self, node_in, node_out):
+        """
+
+        :param nodes_line:
+        :param edges_line:
+        :return:
+        """
+        
 
 class Edge:
 
