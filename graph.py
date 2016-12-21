@@ -287,6 +287,12 @@ class GraphLib:
                 visited.add(vertex)
                 queue.extend(graph[vertex] - visited)
         return visited
+        
+    def connected_component(self):
+        if len(self.bfs(self.prepare_to_traversal(self.adjacency_list), 0)) == len(self.adjacency_list):
+            return True
+        else:
+            return False
 
 #A = GraphLib()
 #A.read_graph('./graph1.txt')
@@ -308,14 +314,15 @@ class GraphLib:
 #print(A.graph_to_matrix())
 #print(A.graph_to_list())
 if __name__ == '__main__':
-    wtf = Graph.read_graph_console_input()
-    print(str(wtf))
-    input()
-    #A = GraphLib()
-    #A.read_graph('./graph3.txt')
-    #A.convert_to_adjacency_list()
+    #wtf = Graph.read_graph_console_input()
+    #print(str(wtf))
+    #input()
+    A = GraphLib()
+    A.read_graph('./graph3.txt')
+    A.convert_to_adjacency_list()
     #print(A.dfs(A.prepare_to_traversal(A.adjacency_list), 5))
     #print(A.dfs(A.prepare_to_traversal(A.adjacency_list), 1))
+
 #сохранение в файл
 #матрица смежности, список смежности, список инцидентности
 #удаление/добавление вершин/ребер
